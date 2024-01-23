@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Guess a word game - Martian Chronicles! </title>
+
+    <link rel="stylesheet" href="F.css">
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <h1>Guess the Martian Chronicles word!</h1>
+
+        <div class="content">
+
+            <input type="text" class="typing-input" maxlength="1">
+
+            <div class="inputs"></div>
+
+            <div class="details">
+
+                <p class="hint">Hint: <span></span></p>
+
+                <p class="guess-left">Remaining Guesses: <span></span></p>
+
+                <p class="wrong-letters">Wrong Lettres: <span></span></p>
+
+            </div>
+
+            <button class="reset-btn">Reset Game</button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+
+
+        const wordList = [
+
+        
+
+        {
+
+        word: "telephaty",
+
+        hint: "How they earth men first communicated with the martians"
+
+        },
+
+        {
+
+        word: "fourth",
+
+        hint: "The succesful expedition number"
+
+        },
+        {
+
+        word: "mars",
+
+        hint: "A planet and the setting"
+
+        },
+
+        {
+
+        word: "ylla",
+
+        hint: "Character in the first part"
+
+        },
+        {
+
+        word: "robots",
+
+        hint: "The idea that something is going to take over the earth in future"
+
+        },
+
+          {
+
+        word: "ohio",
+
+        hint: "The lauch site in the first part of the book."
+
+        },
+
+        
+        {
+
+word: "poems",
+
+hint: "The piece of writing the houses read every night"
+
+},
+
+{
+
+word: "16",
+
+hint: "Amount of crew in the expedition of april"
+
+},
+{
+
+word: "radio-messages",
+
+hint: "Types of messages sent from mars to earth or the opposite."
+
+},
+
+{
+
+word: "yellow",
+
+hint: "Martians color of skin"
+
+},
+{
+
+word: "crazy",
+
+hint: "The opnion of the martians get when they see the crew from earth."
+
+},
+
+  {
+
+word: "red",
+
+hint: "The color of mars soil"
+
+},
+
+
+{
+
+word: "black",
+
+hint: "The color of mars in the book soil"
+
+},
+
+{
+
+word: "south-americans",
+
+hint: "The people who built their own rockets"
+
+},
+{
+
+word: "inhabitable",
+
+hint: "How earth people thought mars will be they arrived."
+
+},
+
+
+{
+
+word: "atomic",
+
+hint: "The way people will fight"
+
+},
+{
+
+word: "outer-gas-planets",
+
+hint: "The types of planets that the captain wilder explored"
+
+},
+
+{
+
+word: "australia",
+
+hint: "The place which had the detonation of the stockpile"
+
+},
+{
+
+word: "three",
+
+hint: "The amount of waves of earth men "
+
+},
+
+  {
+
+word: "three",
+
+hint: "The amount of letters in the martians name in the first part"
+
+},
+
+
+    
+
+
+
+        ]
+
+
+
+        const inputs = document.querySelector(".inputs"),
+
+
+        resetBtn = document.querySelector(".reset-btn"),
+
+        wrongLetter = document.querySelector(".wrong-letters"),
+
+
+        hint = document.querySelector(".hint span"),
+
+
+        guessLeft = document.querySelector(".guess-left span"),
+
+        typingInput = document.querySelector(".typing-input");
+
+
+
+
+
+        let word,maxGuesses, corrects = [], incorrects = [];
+
+
+
+        
+
+
+
+        function randomWord(){
+
+            let randomObj = wordList[Math.floor(Math.random() * wordList.length)];
+
+            word = randomObj.word; 
+           
+
+            maxGuesses = 5; corrects = []; incorrects = [];
+
+            console.log(word);
+
+
+
+            hint.innerText = randomObj.hint;
+
+            guessLeft.innerText = maxGuesses;
+
+            wrongLetter.innerText = incorrects;
+
+
+
+
+
+
+
+            let html = "";
+
+            for (let i=0; i< word.length; i++){
+
+                html += `<input type="text" disabled>`;
+
+            }
+
+            inputs.innerHTML = html;
+
+        }
+
+
+        randomWord();
+
+        
+
+
+        function initGame(e) {
+
+            let key = e.target.value;
+
+        
+
+            if(key.match(/^[A-Za-z]+$/) && !incorrects.includes(` ${key}`)
+
+            && !corrects.includes(key)){
+
+                console.log(key);
+
+
+                if(word.includes(key)){
+
+
+
+                    for(let i = 0; i < word.length; i++){
+
+
+                        if(word[i] === key) {
+
+                            corrects.push(key);
+
+                            inputs.querySelectorAll("input")[i].value = key; 
+
+                        }
+
+                    }
+
+                }else{
+
+                    maxGuesses--; 
+
+
+                    incorrects.push(` ${key}`);
+
+                }
+
+            guessLeft.innerText = maxGuesses;
+
+            wrongLetter.innerText = incorrects;
+
+            }
+
+
+            typingInput.value = "";
+
+
+
+
+
+
+
+            setTimeout(() => {
+
+                if(corrects.length === word.length){
+
+                    alert(`Good Job! You found the word. ${word.toUpperCase()}`);
+
+                    randomWord(); 
+
+                }
+
+    
+
+    
+
+    
+
+                else if(maxGuesses < 1){
+                    alert("Game over! you don't have remaining guesses");
+
+                    for(let i = 0; i < word.length; i++){
+
+
+                        inputs.querySelectorAll("input")[i].value = word[i];
+
+                    }
+
+                }
+
+            });
+
+        }
+
+
+
+        resetBtn.addEventListener("click", randomWord);
+
+        typingInput.addEventListener("input", initGame);
+
+
+        inputs.addEventListener("click", () => typingInput.focus());
+
+
+        document.addEventListener("keydown", () => typingInput.focus());
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
+
